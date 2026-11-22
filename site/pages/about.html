@@ -1,0 +1,68 @@
+<!--
+{
+  "path": "about/",
+  "title": "What a writing replay can and can't show | Writing Replay",
+  "description": "The limits of a writing replay, what the editor records, where your draft is stored, and how to check for yourself that nothing is uploaded.",
+  "og": "home",
+  "nav": "about/",
+  "jsonld": [
+    {
+      "@context": "https://schema.org",
+      "@type": "AboutPage",
+      "name": "What a writing replay can and can't show",
+      "url": "{{site_url}}/about/",
+      "isPartOf": {"@type": "WebSite", "name": "Writing Replay", "url": "{{site_url}}/"}
+    }
+  ]
+}
+-->
+<h1>What a replay can and can't show</h1>
+<p class="lede">Writing Replay records how a text is entered into its editor and lets anyone play that back. It is useful evidence about how something was written. It is not proof of who wrote it, and this page explains why.</p>
+
+<h2>What a replay shows</h2>
+<ul>
+  <li>Every change to the text, in order: characters added, characters removed, and where.</li>
+  <li>When each change happened, to a twentieth of a second, by the clock on the writer's device.</li>
+  <li>How the browser reported each change: a key press, several characters at once (word suggestions, swipe typing, dictation, autocorrect), a paste, a drag and drop, undo or redo, or a change with no keyboard event behind it.</li>
+  <li>Which parts of the finished text arrived which way. Text the writer moves around with cut and paste keeps its original marking; text pasted in from outside is marked as pasted, and the reader can see exactly what it was.</li>
+</ul>
+
+<h2>What it can't show</h2>
+<ul>
+  <li><b>Who was typing.</b> Anyone at the keyboard produces the same kind of recording.</li>
+  <li><b>Where the words came from.</b> Someone can retype text from a book, another screen or a chatbot answer. Retyping usually looks different from composing (fewer pauses, fewer second thoughts), but nothing in a recording makes that certain.</li>
+  <li><b>The real time.</b> Timestamps come from the writer's device clock, which the writer controls.</li>
+</ul>
+
+<h2>How a replay could be faked</h2>
+<p>We'd rather you hear it from us:</p>
+<ul>
+  <li><b>An auto-typing program</b> can type into the editor with uneven speed, pauses and corrections. The editor sees the same events as it would from a person's keyboard. Our <a href="{{root}}verify/?sample=1">sample replay</a> was made this way on purpose.</li>
+  <li><b>A replay file can be written by hand</b> by someone who understands the <a href="{{root}}format/">format</a>. The reader checks that a file is complete and consistent with itself, not that it came from this editor.</li>
+</ul>
+<p>So treat a replay the way you'd treat a stack of handwritten drafts: strong support for a writer's account, best read together with a conversation about the piece. If a replay is the only thing standing between a student and a penalty, talk to the student.</p>
+
+<h2>What the editor records, and what it doesn't</h2>
+<p>A keylogger records every key, how long it is held and the gaps between, which together can identify a person. The editor records less than that:</p>
+<ul>
+  <li>It looks at the text, not the keys. Arrow keys, shortcuts and key-hold times are never recorded.</li>
+  <li>Times are rounded to 50 milliseconds.</li>
+  <li>Nothing about the device, browser or person is recorded. The name on a replay is whatever the writer types, if anything.</li>
+</ul>
+<p>Even so, a replay contains the writer's text and the rhythm of their typing. Writers should share it the way they'd share a draft, with the people who asked for it.</p>
+
+<h2>Where your writing is stored</h2>
+<p>Your draft is saved in your own browser's storage on this device, for this site only. It stays there until you start a new piece or clear your browser's data. There is no account and no server copy, so we can't recover a lost draft. Download your replay file when you finish, and keep it like any other document.</p>
+<p>Storage belongs to the web address you write at. If this site ever moves to a new address, drafts saved at the old one won't follow, so download your replay before you leave a piece unfinished for long.</p>
+
+<h2 id="check">Check for yourself that nothing is uploaded</h2>
+<p>Every page on this site carries a Content Security Policy, an instruction your browser enforces. Ours tells the browser to load scripts only from this site and to refuse every network request the page tries to make. It reads:</p>
+<pre><code>{{csp}}</code></pre>
+<p>To see it at work, open your browser's developer tools (F12, or Cmd+Option+I on a Mac), choose the Network tab, and write something in the editor. Nothing is sent. The only requests are the page's own files loading, before you type anything. The <a href="{{repo_url}}">source code</a> is public under the MIT license.</p>
+<p>{{privacy_line}}</p>
+
+<h2>Replay links</h2>
+<p>A replay link carries the whole recording, compressed, after the <code>#</code> in the address. Browsers don't send that part to any server, including ours. Anyone who has the link can watch the replay, so share it like the file itself.</p>
+
+<h2>Contact</h2>
+<p>Found a bug, or a browser where recording goes wrong? <a href="{{repo_url}}/issues">Open an issue on GitHub</a>. Please don't paste writing you want kept private into an issue: issues are public.</p>

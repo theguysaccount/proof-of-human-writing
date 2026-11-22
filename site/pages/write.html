@@ -1,0 +1,120 @@
+<!--
+{
+  "path": "write/",
+  "title": "Write with a replay | Writing Replay",
+  "description": "A free in-browser editor that records how your text was typed, so you can show a teacher or editor a replay. No account. Nothing is uploaded.",
+  "og": "home",
+  "nav": "write/",
+  "scripts": ["write.js"],
+  "body_class": "app"
+}
+-->
+<noscript><p class="check bad">The editor needs JavaScript to record how the text is typed. Nothing is sent anywhere.</p></noscript>
+
+<section id="gate" hidden>
+  <h1>Write with a replay</h1>
+  <p class="lede">Write here and the editor records how the text comes together. When you're done, you get a replay file to send to whoever asked how you wrote it.</p>
+
+  <div id="resume" class="card" hidden>
+    <h2>You have a draft in this browser</h2>
+    <p id="resume-what"></p>
+    <div class="btn-row">
+      <button id="continue" class="btn" type="button">Continue this draft</button>
+      <button id="discard-ask" class="btn secondary" type="button">Start a new piece</button>
+    </div>
+    <div id="discard-confirm" hidden>
+      <p class="check warn">Starting a new piece deletes this draft and its recording from this browser. If you want to keep it, continue the draft and download its replay first.</p>
+      <div class="btn-row">
+        <button id="discard-yes" class="btn danger" type="button">Delete the draft and start new</button>
+        <button id="discard-no" class="btn secondary" type="button">Keep the draft</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="two">
+    <div>
+      <h2>What gets recorded</h2>
+      <ul>
+        <li>Every change to the text: what was added or removed, and where.</li>
+        <li>When each change happened, rounded to a twentieth of a second.</li>
+        <li>How the browser says it arrived: a key press, a paste, a drop, undo, or something else.</li>
+      </ul>
+    </div>
+    <div>
+      <h2>What doesn't</h2>
+      <ul>
+        <li>Which keys you hold and for how long, your mouse, your screen, or other tabs and apps.</li>
+        <li>Anything about you or your device. There is no account and no cookie.</li>
+      </ul>
+    </div>
+  </div>
+  <p>The recording stays in this browser until you download it. A replay contains your text and the rhythm of your typing, which is personal in the way handwriting is. Share it the way you'd share a draft: with people you choose.</p>
+  <p>A replay shows how a text was typed. It doesn't prove who typed it, and your reader is told that. <a href="{{root}}about/">What a replay can and can't show</a></p>
+
+  <div class="btn-row">
+    <button id="start" class="btn big" type="button">Start writing</button>
+  </div>
+
+  <details class="quiet-box">
+    <summary>Continue a piece from a replay file</summary>
+    <p>Started on another device, or cleared this browser? Choose the replay file you downloaded and keep writing. The earlier sittings stay in the recording.</p>
+    <p><label class="btn secondary" for="file">Choose a replay file</label> <input id="file" class="sr" type="file" accept=".json,application/json"></p>
+    <p id="file-replace-row" hidden><label><input id="file-replace" type="checkbox"> Replace the draft that's in this browser</label></p>
+    <p id="file-msg" class="err" role="alert"></p>
+  </details>
+</section>
+
+<section id="editor" hidden>
+  <p class="status" role="status"><span class="rec" aria-hidden="true"></span>Recording in this browser only <span class="sep">·</span> <span id="stat-words">0 words</span> <span class="sep">·</span> <span id="stat-time">under a minute of writing</span> <span class="sep">·</span> <span id="stat-saved"></span></p>
+  <label class="sr" for="title">Title (optional)</label>
+  <input id="title" class="title" type="text" maxlength="200" placeholder="Title (optional)" autocomplete="off">
+  <label class="sr" for="text">Your writing</label>
+  <textarea id="text" class="paper" placeholder="Start typing." autocomplete="off" autocapitalize="sentences" spellcheck="true"></textarea>
+  <p id="notice" class="notice" role="status" hidden></p>
+  <div class="btn-row">
+    <button id="finish" class="btn" type="button">Finish and get the replay</button>
+    <button id="leave" class="btn secondary" type="button">Save and close</button>
+  </div>
+  <p class="small">Your draft saves itself in this browser as you type. You can close the tab and come back.</p>
+</section>
+
+<section id="export" hidden>
+  <h1 tabindex="-1">Your replay is ready</h1>
+  <div id="export-summary" class="card"></div>
+
+  <p><label for="author">Your name (optional, shown to readers)</label><br>
+  <input id="author" type="text" maxlength="200" autocomplete="name"></p>
+
+  <div class="btn-row">
+    <button id="download" class="btn big" type="button">Download the replay file</button>
+    <button id="preview" class="btn secondary" type="button">See what a reader sees</button>
+  </div>
+  <p class="small">File: <span id="file-name"></span>. It holds your text and the recording, and it never passes through this site: your browser writes it straight to your device.</p>
+
+  <h2>Or share a link</h2>
+  <div id="link-box" hidden>
+    <p>The whole replay is packed into this link. Nothing is stored online; whoever has the link has the replay.</p>
+    <p><input id="link" class="mono" type="text" readonly aria-label="Replay link"> <button id="copy-link" class="btn small" type="button">Copy link</button></p>
+  </div>
+  <p id="link-none" class="small"></p>
+
+  <h2>A note to send with it</h2>
+  <p><textarea id="note" class="mono" rows="5" readonly aria-label="Note to send with the replay"></textarea></p>
+  <p><button id="copy-note" class="btn small secondary" type="button">Copy this note</button></p>
+
+  <div id="badge-box" hidden>
+    <h2>Add a badge where you publish</h2>
+    <p><img src="{{root}}assets/badge.svg" alt="Writing replay: watch how this was typed" width="188" height="28"></p>
+    <p>The badge links to the replay. It says a replay exists, not that anything has been verified.</p>
+    <p><label for="badge-html">HTML</label><br><input id="badge-html" class="mono" type="text" readonly> <button id="copy-badge-html" class="btn small secondary" type="button">Copy</button></p>
+    <p><label for="badge-md">Markdown</label><br><input id="badge-md" class="mono" type="text" readonly> <button id="copy-badge-md" class="btn small secondary" type="button">Copy</button></p>
+  </div>
+
+  <h2>Fingerprint</h2>
+  <p>This replay's fingerprint starts <b id="print" class="mono"></b>. Your reader sees the same one if the file reached them unchanged. It changes if you keep writing or edit your name.</p>
+  <details class="quiet-box"><summary>Full fingerprint (SHA-256)</summary><p id="print-full" class="mono break"></p></details>
+
+  <div class="btn-row">
+    <button id="back" class="btn secondary" type="button">Keep writing</button>
+  </div>
+</section>

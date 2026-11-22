@@ -1,0 +1,101 @@
+<!--
+{
+  "path": "format/",
+  "title": "The writing replay file format, and how the figures are worked out | Writing Replay",
+  "description": "An open, plain-JSON format for recordings of how a text was typed: the fields, the edit list, origin codes, and the exact rules the reader uses for every figure it shows.",
+  "og": "replay",
+  "nav": "",
+  "jsonld": [
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "The writing replay file format",
+      "url": "{{site_url}}/format/",
+      "dateModified": "2026-11-22",
+      "author": {"@type": "Organization", "name": "Writing Replay"},
+      "publisher": {"@type": "Organization", "name": "Writing Replay"}
+    }
+  ]
+}
+-->
+<h1>The replay file format</h1>
+<p class="lede">A replay is a plain JSON file anyone can read, so a reader never has to take this site's word for anything. This page describes version {{format_version}} of the format and the rules behind every figure the reader shows.</p>
+
+<h2>The file</h2>
+<p>Replay files are UTF-8 JSON and end in <code>.writing-replay.json</code>. The editor writes one edit per line, so a file is easy to read in any text editor.</p>
+<pre><code>{
+"format":"writing-replay",
+"version":1,
+"how_to_open":"Open {{verify_url}} and choose this file ...",
+"app":"{{site_url}}/",
+"title":"My essay",
+"author":"Sam",
+"exported":"2026-11-10T08:31:00.000Z",
+"tick_ms":50,
+"final":{"length":687,"sha256":"1752c748…"},
+"sessions":[
+{"start":"2026-11-09T19:02:11.000Z","events":[
+[114,0,0,"T"],
+[3,1,0,"h"],
+[7,2,0,"PASTED TEXT",2],
+[4,12,11,""]
+]}
+]
+}</code></pre>
+
+<h2>Fields</h2>
+<ul>
+  <li><code>format</code> is always <code>"writing-replay"</code>. <code>version</code> is an integer; readers refuse versions newer than they understand.</li>
+  <li><code>title</code> and <code>author</code> are whatever the writer typed, if anything. Nothing checks them.</li>
+  <li><code>exported</code> and each session's <code>start</code> are ISO 8601 times from the writer's device clock.</li>
+  <li><code>tick_ms</code> is the timing unit, 50 milliseconds.</li>
+  <li><code>final</code> gives the length and the SHA-256 (of the UTF-8 bytes) of the text the edits should produce. The reader replays every edit and compares. A mismatch means the file was changed or damaged after export.</li>
+  <li><code>sessions</code> lists the sittings in order. Each has a <code>start</code> time and its <code>events</code>. A later sitting continues from the text the earlier ones left.</li>
+</ul>
+
+<h2>Edits</h2>
+<p>Each event is <code>[dt, pos, del, ins]</code> or <code>[dt, pos, del, ins, origin]</code>:</p>
+<ul>
+  <li><code>dt</code>: ticks since the previous edit in the same sitting (since <code>start</code> for the first).</li>
+  <li><code>pos</code>: where the edit happens, counted in UTF-16 code units from the start of the text.</li>
+  <li><code>del</code>: how many code units are removed at <code>pos</code>.</li>
+  <li><code>ins</code>: the text inserted at <code>pos</code>.</li>
+  <li><code>origin</code>: how the browser reported the change. Leaving it out means 0.</li>
+</ul>
+<div class="table-wrap">
+<table>
+  <thead><tr><th scope="col">Origin</th><th scope="col">Meaning</th><th scope="col">Browser input types</th></tr></thead>
+  <tbody>
+    <tr><td>0</td><td>one key press: a single character, or a deletion</td><td><code>insertText</code>, <code>insertLineBreak</code>, <code>deleteContentBackward</code> and other <code>insert…</code>/<code>delete…</code> types</td></tr>
+    <tr><td>1</td><td>several characters at once from the keyboard</td><td>the same types with more than one character (word suggestions, swipe typing, dictation, <code>insertReplacementText</code>)</td></tr>
+    <tr><td>2</td><td>paste</td><td><code>insertFromPaste</code>, <code>insertFromPasteAsQuotation</code>, <code>insertFromYank</code></td></tr>
+    <tr><td>3</td><td>drag and drop</td><td><code>insertFromDrop</code></td></tr>
+    <tr><td>4</td><td>undo or redo</td><td><code>historyUndo</code>, <code>historyRedo</code></td></tr>
+    <tr><td>5</td><td>a change with no trusted keyboard event</td><td>changes made by scripts or extensions, events the page itself generated, and unknown types</td></tr>
+  </tbody>
+</table>
+</div>
+<p>Input types are defined in the W3C <a href="https://www.w3.org/TR/input-events-2/">Input Events</a> specification (<a href="https://developer.mozilla.org/en-US/docs/Web/API/InputEvent/inputType">MDN summary</a>). The editor reads them from the browser; it never sees which keys were pressed.</p>
+
+<h2>How the reader marks the finished text</h2>
+<p>Each character of the finished text carries the origin of the edit that inserted it. One exception: when a paste, drop, undo or redo inserts text that was already in the document, or was removed from it earlier in the recording, the inserted characters keep the marking they had. That way a writer moving their own sentence around isn't counted as pasting, and pasted text copied a second time is still marked as pasted.</p>
+
+<h2>How the figures are worked out</h2>
+<ul>
+  <li><b>Writing time</b> adds up the gaps between edits within each sitting, leaving out any gap longer than {{idle_s}} seconds.</li>
+  <li><b>Keyboard, pasted and other shares</b> count the characters of the finished text by marking: keyboard is origins 0 and 1, pasted is 2 and 3, other is 4 and 5. Percentages are rounded, but a share that isn't zero is never shown as 0%, and one that isn't everything is never shown as 100%.</li>
+  <li><b>Typing rhythm</b> uses the gaps between consecutive single-key insertions, up to {{burst_s}} seconds apart. “Very even” means their coefficient of variation (standard deviation divided by mean) is below {{even_cv}}, over at least {{even_min}} gaps.</li>
+  <li><b>Continuous runs</b> count keyboard characters entered with no gap longer than {{run_gap_s}} seconds. A run of {{run_chars}} or more characters with no pause over 10 seconds in the whole recording is pointed out.</li>
+  <li><b>Corrections</b>: when at least {{low_rev_min}} characters were entered and less than {{low_rev_pct}}% of them were later deleted, the reader points it out.</li>
+  <li><b>Bulk keyboard insertions</b> of {{big_chunk}} or more characters at once are listed with pastes.</li>
+</ul>
+<p>These are heuristics, chosen to point a reader at moments worth a look. None of them, alone or together, is a verdict, and the reader never shows a score.</p>
+
+<h2>Replay links</h2>
+<p>A link is <code>{{verify_url}}#r=</code> followed by the file's exact bytes, compressed with raw DEFLATE (RFC 1951) and encoded as base64url without padding. The editor only offers a link when the result is short enough to survive being pasted into chat and mail apps.</p>
+
+<h2>Fingerprint</h2>
+<p>The fingerprint is the SHA-256 of the file's bytes. Writer and reader see the same one when the file arrived unchanged.</p>
+
+<h2>Reference code</h2>
+<p>The format, the analysis and its tests are in <a href="{{repo_url}}/blob/main/site/assets/core.js"><code>core.js</code></a>, which runs unchanged in the browser and in Node.js. Use it, or write your own reader: the format is open and the code is MIT licensed.</p>

@@ -1,0 +1,106 @@
+<!--
+{
+  "path": "",
+  "title": "Writing Replay: show how you wrote it",
+  "description": "A free editor that records how your writing was typed, pauses, corrections, pastes and all, and exports a replay a teacher or editor can watch. Nothing leaves your device.",
+  "og": "home",
+  "nav": "",
+  "jsonld": [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Writing Replay",
+      "url": "{{site_url}}/",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "Any",
+      "browserRequirements": "Requires JavaScript",
+      "isAccessibleForFree": true,
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+      "description": "An in-browser editor that records how a text was typed and exports a replay file anyone can open in the site's reader. No account; nothing is uploaded."
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": "{{faq}}"
+    }
+  ],
+  "faq": [
+    ["Does a replay prove I didn't use AI?", "No. A replay shows how the text was entered into this editor: the typing, pauses, corrections and pastes. If you wrote it yourself, that is the process evidence most teachers and editors ask for. It can't show where the words came from, and it tells your reader so."],
+    ["Is my writing uploaded anywhere?", "No. The editor and the reader run entirely in your browser, and the pages are set up so they can't send your text anywhere. Your draft is saved in your own browser's storage. The only copy that leaves your device is the file or link you choose to send."],
+    ["What happens when I paste something?", "The paste is recorded and shown to your reader, along with the text that was pasted. Moving your own sentences around with cut and paste keeps them marked as typed. Pasting a quote or your notes is normal; the replay just shows it."],
+    ["Can a replay be faked?", "Yes, with effort. A program can type text at human-looking speeds, and a replay file can be written by hand by someone who understands the format. A replay is evidence about process, not a certificate."],
+    ["What does my teacher or editor need?", "A web browser. They open the reader page and choose your replay file, or follow your link if the piece is short. They don't need an account, and your file isn't uploaded when they open it."],
+    ["Can I write on a phone?", "Yes. Phone keyboards often enter whole words at once (suggestions, swipe typing, dictation). The replay counts those as keyboard input and labels them as several characters at once."],
+    ["Can I keep writing over several days or on another device?", "Yes. The draft stays in the browser you wrote it in, and each sitting is added to the same recording. To move to another device, download the replay file and choose 'Continue a piece from a replay file' in the editor there."],
+    ["Does it work with Google Docs or Word?", "No. It only records writing done in its own editor. Google Docs and Word keep a version history of their own, which is also worth showing; the guide on this site explains how."],
+    ["What does it cost?", "Nothing. There is no account and no paid tier, and the code is open source under the MIT license."]
+  ]
+}
+-->
+<section class="hero">
+  <h1>Show how you wrote it.</h1>
+  <p class="lede">Write in this editor and it records how the text comes together: the typing, the pauses, the corrections, the pastes. Export a replay that a teacher or editor can watch. Nothing leaves your device unless you send it.</p>
+  <div class="btn-row">
+    <a class="btn big" href="write/">Start writing</a>
+    <a class="btn big secondary" href="verify/">Open a replay</a>
+  </div>
+  <p class="small">Free. No account. <a href="verify/?sample=1">See a sample replay</a></p>
+</section>
+
+<section>
+  <h2>How it works</h2>
+  <ol class="steps">
+    <li><b>Write here.</b> The editor records each change to your text and when it happened. Your draft saves itself in your browser, so you can come back to it tomorrow.</li>
+    <li><b>Export the replay.</b> One small file holds your text and the recording. Short pieces also fit in a link.</li>
+    <li><b>Your reader opens it.</b> On the reader page they see the finished text, a chart of how it grew, anything that was pasted, and a replay they can play at any speed.</li>
+  </ol>
+</section>
+
+<section class="limits">
+  <h2>What a replay shows, and what it can't</h2>
+  <p>A replay is a recording, not a certificate. The reader page says this to everyone who opens one.</p>
+  <ul>
+    <li><b>It shows</b> how a text was entered into this editor: typed key by key, revised, pasted, and when.</li>
+    <li><b>It can't show</b> who was at the keyboard, or what was on another screen. Text can be retyped from somewhere else.</li>
+    <li><b>It can be faked.</b> An auto-typing program can imitate a person, and someone with the skill can fabricate a replay file.</li>
+  </ul>
+  <p>What it gives an honest writer is what a suspicious reader usually asks for: the drafts, the hesitations and the second thoughts, in order. <a href="about/">More on limits and privacy</a></p>
+</section>
+
+<section>
+  <h2>Private by design</h2>
+  <div class="two">
+    <ul>
+      <li><b>No upload.</b> The editor and the reader run in your browser. Each page carries a security policy that blocks it from sending data anywhere; <a href="about/#check">you can check it yourself</a>.</li>
+      <li><b>No account, no cookies.</b> Your draft lives in this browser's storage until you delete it.</li>
+    </ul>
+    <ul>
+      <li><b>Less than a keylogger.</b> Timings are rounded to a twentieth of a second, and how long you hold each key is never recorded.</li>
+      <li><b>You choose who sees it.</b> A replay contains your text and your typing rhythm. Send it to people you'd show a draft to.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2>Who it's for</h2>
+  <div class="three">
+    <div class="card"><h3>Students</h3><p>Hand in your process along with your essay, or have it ready if someone asks how you wrote it.</p><p><a href="guides/prove-you-wrote-it/">How to show you wrote it yourself</a></p></div>
+    <div class="card"><h3>Teachers and editors</h3><p>Ask for a replay with the final piece. Reading one takes a couple of minutes, and needs nothing installed.</p><p><a href="guides/reading-a-replay/">How to read a replay</a></p></div>
+    <div class="card"><h3>Writers flagged by a detector</h3><p>AI detectors make mistakes. Process evidence is the strongest answer you can give.</p><p><a href="guides/flagged-by-an-ai-detector/">What to do if you're flagged</a></p></div>
+  </div>
+</section>
+
+{{money_slot}}
+
+<section>
+  <h2>Questions</h2>
+  {{faq_html}}
+</section>
+
+<section class="cta">
+  <h2>Try it on the next thing you write</h2>
+  <div class="btn-row">
+    <a class="btn big" href="write/">Start writing</a>
+    <a class="btn big secondary" href="verify/?sample=1">See a sample replay</a>
+  </div>
+</section>

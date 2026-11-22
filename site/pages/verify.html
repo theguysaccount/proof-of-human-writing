@@ -1,0 +1,105 @@
+<!--
+{
+  "path": "verify/",
+  "title": "Open a writing replay | Writing Replay",
+  "description": "Open a writing replay file or link and watch how the text was typed: every pause, correction and paste. Runs in your browser; the file is never uploaded.",
+  "og": "replay",
+  "nav": "verify/",
+  "scripts": ["verify.js"],
+  "body_class": "app"
+}
+-->
+<noscript><p class="check bad">The reader needs JavaScript to play a replay. The file is read in your browser and is not uploaded.</p></noscript>
+
+<section id="opener">
+  <h1 tabindex="-1">Open a writing replay</h1>
+  <p class="lede">Someone sent you a replay of how they typed a piece of writing. Choose the file to watch it. It is read in your browser and never uploaded.</p>
+  <div id="drop" class="drop">
+    <p><label class="btn big" for="file">Choose a replay file</label><input id="file" class="sr" type="file" accept=".json,application/json"></p>
+    <p class="small">or drop it here. Replay files end in <span class="mono">.writing-replay.json</span></p>
+  </div>
+  <p id="error" class="check bad" role="alert" hidden></p>
+  <p>No file to hand? <a href="?sample=1">Open the sample replay</a> to see what one looks like.</p>
+  <div class="limits">
+    <h2>What a replay can and can't tell you</h2>
+    <ul>
+      <li><b>It shows</b> how a text was entered into the Writing Replay editor: each key press, pause, deletion and paste, in order.</li>
+      <li><b>It can't show</b> who was at the keyboard, or what was on their other screens. Text can be retyped from another source.</li>
+      <li><b>It isn't tamper-proof.</b> A program can type like a person, and a replay file can be fabricated by someone with the skill.</li>
+    </ul>
+    <p>Treat a replay as evidence about process, to go with a conversation with the writer. <a href="{{root}}guides/reading-a-replay/">How to read a replay</a></p>
+  </div>
+</section>
+
+<section id="report" hidden>
+  <p class="eyebrow">Writing replay</p>
+  <h1 id="r-title" tabindex="-1"></h1>
+  <p id="r-meta" class="small"></p>
+
+  <div class="limits">
+    <h2>Read this first</h2>
+    <p>This is a recording of how the text below was entered into the Writing Replay editor. It can show typing, pauses, corrections and pastes. It can't show who was typing or what they were looking at, and a determined person can fake one with an auto-typing program or by fabricating the file. It is evidence about process, not proof of authorship.</p>
+  </div>
+
+  <p id="r-check" class="check"></p>
+
+  <div id="tiles" class="tiles"></div>
+
+  <h2>What stands out</h2>
+  <p class="small">Facts from the recording and what they can mean. None of them is a verdict.</p>
+  <ul id="observations" class="observations"></ul>
+
+  <h2>How the text grew</h2>
+  <p class="small">Steady typing climbs gradually, deletions dip, and a paste is a jump marked with a dot. Click the chart to move the replay to that moment.</p>
+  <div class="chart-wrap"><svg id="chart" role="img" preserveAspectRatio="xMidYMid meet"></svg></div>
+
+  <h2 id="player">Watch it being written</h2>
+  <div class="player">
+    <div id="screen" class="screen" tabindex="0" aria-label="The text at this point in the replay"></div>
+    <div class="controls">
+      <button id="play" class="btn" type="button" aria-pressed="false">Play</button>
+      <label>Speed <select id="speed">
+        <option value="1">1×</option><option value="2">2×</option><option value="8" selected>8×</option><option value="32">32×</option><option value="128">128×</option>
+      </select></label>
+      <label class="check-row"><input id="skip" type="checkbox" checked> Shorten pauses over 2 seconds</label>
+      <span id="time" class="mono">0:00 / 0:00</span>
+      <button id="to-end" class="btn small secondary" type="button">Jump to the end</button>
+    </div>
+    <label class="sr" for="seek">Position in the replay</label>
+    <input id="seek" type="range" min="0" max="0" step="1" value="0">
+    <p id="where" class="small" aria-live="off"></p>
+  </div>
+
+  <h2>The finished text</h2>
+  <p class="legend small"><span class="o0">typed one key at a time</span> <span class="o1">entered several characters at once</span> <span class="o2">pasted or dropped in</span> <span class="o5">changed without a key press</span></p>
+  <div id="final" class="screen final" tabindex="0" aria-label="The finished text, marked by how each part was entered"></div>
+
+  <h2>Pastes and other insertions</h2>
+  <p id="inserts-none">Nothing was pasted in, dropped in or inserted in bulk from outside this document.</p>
+  <div id="inserts-wrap" class="table-wrap" hidden>
+    <table>
+      <thead><tr><th scope="col">At</th><th scope="col">How</th><th scope="col">Characters</th><th scope="col">Starts with</th><th scope="col"><span class="sr">Show in the replay</span></th></tr></thead>
+      <tbody id="inserts"></tbody>
+    </table>
+  </div>
+  <p id="moved" class="small"></p>
+
+  <h2>The numbers</h2>
+  <ul id="numbers"></ul>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th scope="col">Sitting</th><th scope="col">First edit</th><th scope="col">Writing time</th><th scope="col">Edits</th><th scope="col">Length (characters)</th></tr></thead>
+      <tbody id="sittings"></tbody>
+    </table>
+  </div>
+  <p class="small">Times come from the clock on the writer's device, which the writer controls. Writing time leaves out pauses longer than a minute. <a href="{{root}}format/">How these figures are worked out</a></p>
+
+  <h2>Fingerprint</h2>
+  <p>Opened from <span id="r-source"></span>. This replay's fingerprint starts <b id="print" class="mono"></b>. If the writer tells you the same one, the replay reached you unchanged.</p>
+  <details class="quiet-box"><summary>Full fingerprint (SHA-256)</summary><p id="print-full" class="mono break"></p></details>
+
+  <div class="btn-row">
+    <button id="another" class="btn secondary" type="button">Open another replay</button>
+    <a class="btn" href="{{root}}write/">Write your own piece with a replay</a>
+  </div>
+</section>
