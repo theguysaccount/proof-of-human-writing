@@ -78,6 +78,10 @@ class Site:
         self.site_url = os.environ.get("SITE_URL", "").strip().rstrip("/") or DEFAULT_SITE_URL
         self.goatcounter = os.environ.get("GOATCOUNTER_URL", "").strip()
         self.schools = os.environ.get("SCHOOLS_URL", "").strip()
+        move = os.environ.get("MOVE_NOTICE_URL", "").strip()
+        if move and not re.match(r'^https://[a-z0-9.-]+\.[a-z]{2,}(/[^\s"<>]*)?$', move, re.I):
+            raise SystemExit(f"MOVE_NOTICE_URL must be an https address, got {move!r}")
+        self.move_notice = move
         self.commit = os.environ.get("GITHUB_SHA", "").strip() or "local"
         h = hashlib.sha1()
         for p in sorted((ROOT / "site").rglob("*")):
@@ -88,6 +92,13 @@ class Site:
         self.indexable = []
 
     # ----- helpers -----
+    def move_banner(self):
+        """Shown on every page while MOVE_NOTICE_URL is set, a few weeks before a domain move."""
+        if not self.move_notice:
+            return ""
+        url = attr(self.move_notice)
+        return '<aside class="move-notice" role="note"><p>' + 'Writing Replay is moving to <a href="{url}">{url}</a>. Drafts are saved in your browser for this address only. If you have a draft here, open it in the editor, choose “Finish and get the replay”, download the file, and at the new address choose “Continue a piece from a replay file”.'.replace("{url}", url) + '</p></aside>\n'
+
     def url(self, path):
         return f"{self.site_url}/{path}"
 
@@ -191,7 +202,7 @@ class Site:
 <nav class="nav" aria-label="Main">{nav}</nav>
 </div></header>
 <main id="main" class="wrap">
-{body}
+{self.move_banner()}{body}
 </main>
 <footer class="site-foot"><div class="wrap">
 <nav aria-label="Footer">{foot}<a href="{REPO_URL}">Source code</a></nav>
